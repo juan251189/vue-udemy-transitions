@@ -5,14 +5,33 @@
     <button @click="selected=!selected">Click me </button>
 
 
-
-    <transition name="fade">
-      <p class="sign" v-if="selected">oiiii</p>
+    <transition appear
+    enter-active-class="animate__animated animate__backInDown"
+    leave-active-class="animate__animated animate__bounce">
+      <div class="alert alert-info" v-if="selected"
+      >Hi there</div>
     </transition>
-    <transition name="slide" type="transition">
-      <p v-if="selected" class="sign">{{text | capitalized}}</p>
+
+    <hr>
+<br>
+<select v-model="selectOption">
+  <option value="fade">Fade</option>
+  <option value="slide">Slide</option>
+</select>
+
+    <transition :name="selectOption" appear>
+      <p class="sign" v-if="selected" appear>oiiii</p>
+    </transition>
+    <transition name="slide" type="transition" mode="out-in">
+      <div v-if="selected" key="info" class="sign">{{text | capitalized}}</div>
+      <div  class="alert alert-warning"
+      v-else key="warning">This is some warning</div>
 
     </transition>
+
+
+    <br>
+
 
   </div>
 </template>
@@ -24,7 +43,8 @@ export default {
   data(){
     return{
       selected:true,
-      text:'hi there'
+      text:'hi there',
+      selectOption:''
     }
   },
   components: {
