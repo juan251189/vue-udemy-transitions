@@ -1,62 +1,85 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <br>
-    <button @click="selected=!selected">Click me </button>
+<div id="app">
 
-
-    <transition appear
-    enter-active-class="animate__animated animate__backInDown"
-    leave-active-class="animate__animated animate__bounce">
-      <div class="alert alert-info" v-if="selected"
-      >Hi there</div>
-    </transition>
-
-    <hr>
-<br>
-<select v-model="selectOption">
-  <option value="fade">Fade</option>
-  <option value="slide">Slide</option>
-</select>
-
-    <transition :name="selectOption" appear>
-      <p class="sign" v-if="selected" appear>oiiii</p>
-    </transition>
-    <transition name="slide" type="transition" mode="out-in">
-      <div v-if="selected" key="info" class="sign">{{text | capitalized}}</div>
-      <div  class="alert alert-warning"
-      v-else key="warning">This is some warning</div>
-
-    </transition>
-
-
-    <br>
-
-
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h1>The Super Quiz</h1>
+      </div>
+    </div>
+    <div>
+      <component :index="index" :question="currentQuestion" :is="submitted"></component>
+    </div>
   </div>
+
+
+</div>
 </template>
 
 <script>
-
+import Answer from './components/Answer.vue'
+import Question from './components/Question.vue'
 export default {
   name: 'App',
-  data(){
-    return{
-      selected:true,
-      text:'hi there',
-      selectOption:''
-    }
-  },
-  components: {
+  data() {
+    return {
+      submitted: 'app-question',
+      index:0,
+      currentQuestion:{},
+      total:0,
+      questions: [{
+        Question: "Whats the capital of Colombia",
+        answers: {
+          a: 'Medellin',
+          b: 'Cartagena',
+          c: 'Bogota',
+          d: 'Cali',
 
-  },
-  filters:{
-    capitalized:function(value){
-      return value.toUpperCase();
-    }
+        },
+        solution:'c'
+      },
+      {
+        Question: "What's 45 +20",
+        answers: {
+          a: 35,
+          b: 42,
+          c: 37,
+          d: 44,
+
+        },
+        solution:'c'
+      },
+      {
+        Question: "What's 80 +11",
+        answers: {
+          a: 35,
+          b: 42,
+          c: 37,
+          d: 44,
+
+        },
+        solution:'c'
+      }
+    ]
+
+    }},
+    components: {
+        appAnswer: Answer,
+        appQuestion: Question
+
+      },
+
+      filters: {
+        capitalized: function(value) {
+          return value.toUpperCase();
+        }
+      },
+      created() {
+        //do something after creating vue instance
+        this.currentQuestion=this.questions[this.index];
+      }
+
   }
-
-}
 </script>
 
 <style>
@@ -69,48 +92,49 @@ export default {
   margin-top: 60px;
 }
 
-.sign{
+.sign {
   width: 80%;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
   background-color: #2e26a4;
-  margin:20px auto;
-  color:#ddd9e3;
+  margin: 20px auto;
+  color: #ddd9e3;
   padding: 20px;
   font-size: 2rem;
 }
 
 
 
-.fade-enter .fade-leave{
+.fade-enter .fade-leave {
   opacity: 0;
 }
 
 
-.fade-enter-active{
+.fade-enter-active {
   opacity: 1px;
   transition: .5s;
 }
-.fade-leave-active{
+
+.fade-leave-active {
   transition: opacity .5s;
   opacity: 0;
 }
+
 .slide-enter {
   opacity: 0;
   transition: 2s;
 }
-.slide-leave{
 
-}
+.slide-leave {}
 
-.slide-enter-active{
+.slide-enter-active {
   animation: slide-in 1s forwards;
   transition: opacity .5s;
 }
 
-.slide-leave-active{
+.slide-leave-active {
   animation: slide-out 1s ease-out forwards;
   transition: opacity .5s;
   opacity: 0;
@@ -118,11 +142,12 @@ export default {
 
 
 @keyframes slide-in {
-  from{
+  from {
     transform: translateY(20px);
     width: 100%;
   }
-  to{
+
+  to {
     transform: translateY(0);
     width: 80%;
   }
@@ -130,11 +155,12 @@ export default {
 
 
 @keyframes slide-out {
-  from{
+  from {
     transform: translateY(0);
 
   }
-  to{
+
+  to {
     transform: translateY(20px);
 
   }
