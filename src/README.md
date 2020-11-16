@@ -1,4 +1,4 @@
 
 
-[]Refactor the app the loop trough the questions buttons and use only one
+[ ✓ ]Refactor the app the loop trough the questions buttons and use only one
 [ ] check atransitions

@@ -8,7 +8,7 @@
       </div>
     </div>
     <div>
-      <component :index="index" :question="currentQuestion" :is="submitted"></component>
+      <component :index="index" :question="currentQuestion"  :is="submitted"></component>
     </div>
   </div>
 
@@ -36,7 +36,7 @@ export default {
           d: 'Cali',
 
         },
-        solution:'c'
+        solution:'Bogota'
       },
       {
         Question: "What's 45 +20",
