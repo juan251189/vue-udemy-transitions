@@ -2,15 +2,13 @@
 <div id="question" class="row ">
   <div class="col-12 question-title">{{question.Question}}</div>
 
-  <div class="col-6 question-options" v-for="(option,i) in question.answers" :key="i"
-  >
-<span class="question-option-header">{{i}})</span>
-    <button class="btn btn-primary"
-
-    @click="selected=option" :style="selected ===option ? 'background:linear-gradient(to right,#a78419,#dbc534)' : null">
-      {{option}}
-    </button>
-
+  <div class="col-6 question-options" v-for="(option,i) in question.answers" :key="i">
+    <transition name="selectedClass">
+      <button class="btn btn-primary btn-option" @click="selected=option" :style="selected ===option ? 'background:linear-gradient(to right,#a78419,#dbc534)' : null">
+        <span class="question-option-header">{{i}}:</span>
+        <div class="option-item">{{option}}</div>
+      </button>
+    </transition>
   </div>
   <!--
     <button class="btn btn-primary" @click="submit($event)" value="a">{{question.answers.a}}</button></div>
@@ -24,32 +22,31 @@
         <div class="col-6"><span class="question-option">D)</span>
           <button class="btn btn-primary" @click="submit($event)" value="d">{{question.answers.d}}</button>
 -->
-<button class="btn btn-info submit" @click="submit" >Submit</button>
+  <button class="btn btn-info submit" @click="submit">Submit</button>
 </div>
-
 </template>
 <script>
 export default {
 
   data: () => ({
-      selected:"",
-      result:''
+    selected: "",
+    result: ''
   }),
   props: ['question'],
   methods: {
-    submit(){
-        let value=this.selected;
-        if(value==this.question.solution) {
-          this.result='correct';
-          alert("Excelent")
-        }
-        else{
-          alert("keep trying")
-        }
+    submit() {
+      let value = this.selected;
+      if (value == this.question.solution) {
+        this.result = 'correct';
+        this.$emit('scored');
+        alert("Excelent")
+      } else {
+        alert("keep trying")
+      }
 
     },
-    selectedClass(){
-            return {backgroundColor:'red'}
+    selectedClass() {
+      return 'flash'
     }
   }
 }
@@ -65,13 +62,15 @@ export default {
 .question-options button{
   margin-bottom: 30px;
   width: 150px;
+  border-radius: 32px;
 }
 .question-option-header{
-  font-size: 1em;
+  font-size: 1.2em;
   font-weight: 700;
   position: relative;
-  bottom: 10px;
-  right: 5px;
+  bottom: 2px;
+  left:10px;
+  float: left;
 }
 
 .question-title{
@@ -81,11 +80,21 @@ margin-bottom: 30px;;
   border:1px solid lightgrey;
 }
 
+.option-item{
+  display: inline;
+width: 100%;
+  text-align: left;
+}
+
 .submit{
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
 }
 
+
+.flash-enter-active{
+  background-color: red;
+}
 
 </style>

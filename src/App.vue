@@ -1,15 +1,23 @@
 <template>
 <div id="app">
-
+<button class="btn btn-score btn-primary" @click="scoreShow=!scoreShow">Score</button>
   <div class="container">
     <div class="row">
       <div class="col-12">
         <h1>The Super Quiz</h1>
       </div>
     </div>
-    <div>
-      <component :index="index" :question="currentQuestion"  :is="submitted"></component>
-    </div>
+
+<transition name="fade">
+      <app-score v-if="scoreShow"></app-score>
+</transition>
+
+
+      <component @score="scoreCount(value)" :index="index" :question="currentQuestion"
+
+      :is="submitted">
+    </component>
+
   </div>
 
 
@@ -19,6 +27,7 @@
 <script>
 import Answer from './components/Answer.vue'
 import Question from './components/Question.vue'
+import Score from './components/Score.vue'
 export default {
   name: 'App',
   data() {
@@ -27,6 +36,8 @@ export default {
       index:0,
       currentQuestion:{},
       total:0,
+      score:0,
+      scoreShow:false,
       questions: [{
         Question: "Whats the capital of Colombia",
         answers: {
@@ -63,9 +74,16 @@ export default {
     ]
 
     }},
+    methods:{
+      scoreCount(v){
+
+          alert(v);
+      }
+    },
     components: {
         appAnswer: Answer,
-        appQuestion: Question
+        appQuestion: Question,
+        appScore: Score
 
       },
 
@@ -92,6 +110,10 @@ export default {
   margin-top: 60px;
 }
 
+body{
+  background-image:
+}
+
 .sign {
   width: 80%;
   display: flex;
@@ -104,21 +126,17 @@ export default {
   padding: 20px;
   font-size: 2rem;
 }
-
-
-
-.fade-enter .fade-leave {
-  opacity: 0;
+.btn-score{
+  border-radius: 1px 20px 20px 1px;
+  position: fixed;
+  left:1px;
+  z-index: 2;
 }
 
-
-.fade-enter-active {
-  opacity: 1px;
-  transition: .5s;
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .4s;
 }
-
-.fade-leave-active {
-  transition: opacity .5s;
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
 }
 
