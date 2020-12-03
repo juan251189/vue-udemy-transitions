@@ -1,6 +1,7 @@
 <template>
 <div id="question" class="row ">
-  <div class="col-12 question-title">{{question.Question}}</div>
+  <h1 :style="selectedClass">asdfsdfasd</h1>
+  <div class="col-12 question-title">{{question.Question}} ?</div>
 
   <div class="col-6 question-options" v-for="(option,i) in question.answers" :key="i">
     <transition name="selectedClass">
@@ -36,17 +37,20 @@ export default {
   methods: {
     submit() {
       let value = this.selected;
+      let correctAnswer='rgb(39, 187, 103)';
+      let wrongAnswer='rgb(190, 33, 33)';
       if (value == this.question.solution) {
         this.result = 'correct';
-        this.$emit('scored');
-        alert("Excelent")
+      this.selectedClass(correctAnswer);
+        this.$emit('nextquestion');
+
       } else {
-        alert("keep trying")
+        this.selectedClass(wrongAnswer);
       }
 
     },
-    selectedClass() {
-      return 'flash'
+    selectedClass(arg) {
+          return{color:arg};
     }
   }
 }
@@ -54,15 +58,17 @@ export default {
 <style lang="css">
 
 #question{
-  border:1px solid lightgrey;
+
   margin:0px;
+
   padding: 0px;
 }
 
 .question-options button{
   margin-bottom: 30px;
-  width: 150px;
+  width: 100%;
   border-radius: 32px;
+  border: 2px solid white;
 }
 .question-option-header{
   font-size: 1.2em;
@@ -71,13 +77,19 @@ export default {
   bottom: 2px;
   left:10px;
   float: left;
+
 }
 
 .question-title{
   width: 100%!important;
 padding: 0px;
-margin-bottom: 30px;;
+font-weight: 700;
+font-size: 1.5rem;
+margin-bottom: 30px;
   border:1px solid lightgrey;
+    background-color: #223C90;
+    border-radius: 15px;
+
 }
 
 .option-item{

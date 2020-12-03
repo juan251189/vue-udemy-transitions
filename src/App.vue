@@ -1,6 +1,6 @@
 <template>
 <div id="app">
-<button class="btn btn-score btn-primary" @click="scoreShow=!scoreShow">Score</button>
+  <button class="btn btn-score btn-primary" @click="scoreShow=!scoreShow">Score</button>
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -8,14 +8,11 @@
       </div>
     </div>
 
-<transition name="fade">
-      <app-score v-if="scoreShow"></app-score>
-</transition>
+    <transition name="fade">
+      <app-score v-if="scoreShow" :scoretotal="score"></app-score>
+    </transition>
 
-
-      <component @score="scoreCount(value)" :index="index" :question="currentQuestion"
-
-      :is="submitted">
+    <component @nextquestion="nextQuestion" :index="index" :question="currentQuestion" :is="submitted" >
     </component>
 
   </div>
@@ -33,71 +30,79 @@ export default {
   data() {
     return {
       submitted: 'app-question',
-      index:0,
-      currentQuestion:{},
-      total:0,
-      score:0,
-      scoreShow:false,
+      index: 0,
+      currentQuestion: {},
+      total: 0,
+      score: 0,
+      quantity:54,
+      scoreShow: false,
       questions: [{
-        Question: "Whats the capital of Colombia",
-        answers: {
-          a: 'Medellin',
-          b: 'Cartagena',
-          c: 'Bogota',
-          d: 'Cali',
+          Question: "Whats the capital of Colombia",
+          answers: {
+            a: 'Medellin',
+            b: 'Cartagena',
+            c: 'Bogota',
+            d: 'Cali',
 
+          },
+          solution: 'Bogota'
         },
-        solution:'Bogota'
-      },
-      {
-        Question: "What's 45 +20",
-        answers: {
-          a: 35,
-          b: 42,
-          c: 37,
-          d: 44,
+        {
+          Question: "What's 45 +20",
+          answers: {
+            a: 65,
+            b: 42,
+            c: 37,
+            d: 44,
 
+          },
+          solution: 65
         },
-        solution:'c'
-      },
-      {
-        Question: "What's 80 +11",
-        answers: {
-          a: 35,
-          b: 42,
-          c: 37,
-          d: 44,
+        {
+          Question: "What's 80 +11",
+          answers: {
+            a: 35,
+            b: 42,
+            c: 91,
+            d: 44,
 
-        },
-        solution:'c'
-      }
-    ]
-
-    }},
-    methods:{
-      scoreCount(v){
-
-          alert(v);
-      }
-    },
-    components: {
-        appAnswer: Answer,
-        appQuestion: Question,
-        appScore: Score
-
-      },
-
-      filters: {
-        capitalized: function(value) {
-          return value.toUpperCase();
+          },
+          solution: 91
         }
-      },
-      created() {
-        //do something after creating vue instance
-        this.currentQuestion=this.questions[this.index];
-      }
+      ]
 
+    }
+  },
+  methods: {
+    nextQuestion() {
+    this.scoreShow=true;
+    var v =this;
+      v.score += 1;
+      setTimeout(function(){
+        v.index+=1;
+        v.currentQuestion=v.questions[v.index];
+        v.scoreShow=false;
+      }, 3000);
+    }
+  },
+  components: {
+    appAnswer: Answer,
+    appQuestion: Question,
+    appScore: Score
+
+  },
+
+  filters: {
+    capitalized: function(value) {
+      return value.toUpperCase();
+    }
+  },
+  created() {
+    //do something after creating vue instance
+    this.currentQuestion = this.questions[this.index];
   }
+
+}
 </script>
 
 <style>
@@ -106,12 +111,20 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: rgb(209, 209, 209);
   margin-top: 60px;
 }
 
-body{
-  background-image:
+body {
+  background: url('./assets/background-room.jpg');
+  background-size: cover;
+  height: 100vh;
+  background-repeat: no-repeat;
+  background-position:center;
+  padding-top: 10%;
+  overflow: hidden;
+
+
 }
 
 .sign {
@@ -126,17 +139,26 @@ body{
   padding: 20px;
   font-size: 2rem;
 }
-.btn-score{
+
+.btn-score {
   border-radius: 1px 20px 20px 1px;
   position: fixed;
-  left:1px;
+  left: 1px;
+  top: 10%;
   z-index: 2;
+  transition:2.5s;
 }
 
-.fade-enter-active, .fade-leave-active {
+.fade-enter-active,
+.fade-leave-active {
   transition: opacity .4s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+
+.fade-enter,
+.fade-leave-to
+
+/* .fade-leave-active below version 2.1.8 */
+  {
   opacity: 0;
 }
 
@@ -158,6 +180,15 @@ body{
   opacity: 0;
 }
 
+@media only screen and (max-width:450px){
+body{
+    padding-top: 40%;
+}
+.btn-score{
+  top:10px;
+}
+
+}
 
 @keyframes slide-in {
   from {
